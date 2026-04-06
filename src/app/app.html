@@ -1,0 +1,111 @@
+<div [class]="'min-h-screen transition-colors duration-1000 ' + currentBgColor()">
+  
+  <!-- Landing Page -->
+  @if (!isExploring()) {
+    <div class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-950 text-white overflow-hidden">
+      <!-- Animated Background Elements -->
+      <div class="absolute inset-0 opacity-20">
+        <div class="absolute top-1/4 left-1/4 w-32 h-32 md:w-64 md:h-64 bg-indigo-500 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-48 h-48 md:w-96 md:h-96 bg-purple-500 rounded-full blur-3xl animate-pulse delay-700"></div>
+      </div>
+
+      <div class="relative z-10 text-center px-6 max-w-3xl">
+        <h1 class="text-6xl md:text-8xl font-display font-bold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40">
+          Chronicle Of Everything
+        </h1>
+        <p class="text-xl md:text-2xl text-indigo-200/60 font-light mb-12 leading-relaxed">
+          A continuous journey through the history of the universe, Earth, and humanity. 
+          From the first spark to the digital age.
+        </p>
+        <button 
+          (click)="startExploring()"
+          class="group relative px-8 py-4 bg-white text-slate-950 font-semibold rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95"
+        >
+          <span class="relative z-10 flex items-center gap-2">
+            Explore the Universe
+            <span class="material-icons group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </span>
+          <div class="absolute inset-0 bg-indigo-100 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+        </button>
+      </div>
+
+      <div class="absolute bottom-8 text-white/20 font-mono text-xs uppercase tracking-[0.2em]">
+        Scroll to travel through time
+      </div>
+
+      <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/30 font-mono text-xs">
+        Designed and Developed by Dev Malu
+      </div>
+    </div>
+  }
+
+  <!-- Main Timeline View -->
+  @if (isExploring()) {
+    <!-- Abstract Background Shapes -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+      <div class="absolute inset-0" [style.transform]="'translateY(' + scrollY() * 0.15 + 'px)'">
+        <div class="bg-shape w-[500px] h-[500px] -top-24 -left-24 bg-indigo-500/20 animate-float"></div>
+      </div>
+      <div class="absolute inset-0" [style.transform]="'translateY(' + scrollY() * -0.1 + 'px)'">
+        <div class="bg-shape w-[600px] h-[600px] bottom-0 -right-24 bg-purple-500/20 animate-float" style="animation-delay: -5s"></div>
+      </div>
+      <div class="absolute inset-0" [style.transform]="'translateY(' + scrollY() * 0.05 + 'px)'">
+        <div class="bg-shape w-[400px] h-[400px] top-1/2 left-1/3 bg-blue-500/10 animate-float" style="animation-delay: -2s"></div>
+      </div>
+    </div>
+
+    <!-- Timeline Content -->
+    <main class="relative pt-32 md:pt-64 pb-96 px-4 md:px-6 max-w-5xl mx-auto">
+      <div class="timeline-line"></div>
+
+      <!-- Continuous Events -->
+      <div class="space-y-[15vh] md:space-y-[20vh]">
+        @for (event of filteredEvents(); track event.event; let i = $index) {
+          <div class="event-item opacity-0 group relative flex flex-col md:flex-row md:items-center" [class.md:flex-row-reverse]="i % 2 !== 0" (click)="toggleEventDetails(i)">
+            <!-- Center Dot -->
+            <div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white/20 border-4 border-slate-900 z-10 group-hover:scale-150 group-hover:bg-white transition-all duration-500 md:group-hover:scale-150 md:group-hover:bg-white"></div>
+
+            <!-- Content Card -->
+            <div class="w-full md:w-1/2 px-4 md:px-8 lg:px-16 mt-8 md:mt-0" [class.md:text-right]="i % 2 === 0">
+              <div class="inline-block glass-card p-6 md:p-8 rounded-3xl transition-all duration-500 hover:bg-white/10 hover:-translate-y-2 cursor-default max-w-md mx-auto md:mx-0">
+                <div class="text-3xl md:text-4xl mb-4 transform group-hover:scale-110 transition-transform duration-500">{{ event.emoji }}</div>
+                <div class="text-xs font-mono uppercase tracking-widest opacity-40 mb-2 text-white">{{ event.date }}</div>
+                <h3 class="text-lg md:text-xl lg:text-2xl font-display font-bold text-white mb-4 leading-tight">
+                  {{ event.event }}
+                </h3>
+
+                <!-- Know More / Details -->
+                <div class="relative overflow-hidden transition-all duration-500" [class.max-h-96]="isEventExpanded(i)" [class.max-h-0]="!isEventExpanded(i)" [class.md:group-hover:max-h-96]="true">
+                  <div class="pt-4 border-t border-white/10 text-white/70 text-sm leading-relaxed">
+                    {{ event.details }}
+                  </div>
+                </div>
+
+                <div class="mt-4 flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-white/30 group-hover:text-white/60 transition-colors md:group-hover:text-white/60">
+                  <span class="material-icons text-xs">info</span>
+                  <span class="hidden md:inline">Hover to know more</span>
+                  <span class="md:hidden">{{ isEventExpanded(i) ? 'Tap to hide' : 'Tap to know more' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- End of Journey -->
+      <div class="text-center py-64">
+        <div class="text-6xl mb-8">✨</div>
+        <h2 class="text-4xl font-display font-bold text-white mb-4">The Journey Continues</h2>
+        <p class="text-white/40 max-w-md mx-auto">
+          We are currently living in the Contemporary era, shaping the history of tomorrow.
+        </p>
+        <button 
+          (click)="isExploring.set(false)"
+          class="mt-12 px-6 py-3 rounded-full border border-white/10 text-white/60 hover:text-white hover:bg-white/5 transition-all"
+        >
+          Return to Start
+        </button>
+      </div>
+    </main>
+  }
+</div>

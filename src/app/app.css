@@ -1,0 +1,40 @@
+:host {
+  display: block;
+}
+
+.era-section {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.event-item {
+  will-change: transform, opacity;
+}
+
+.glass-card {
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.glass-card:hover {
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Abstract Background Shapes */
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.15;
+  transition: all 2s ease-in-out;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.05); }
+}
+
+.animate-float {
+  animation: float 10s infinite ease-in-out;
+}
